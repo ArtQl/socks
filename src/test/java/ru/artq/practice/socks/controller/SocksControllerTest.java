@@ -10,7 +10,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import ru.artq.practice.socks.model.Socks;
 import ru.artq.practice.socks.service.SocksService;
+
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,7 +44,7 @@ public class SocksControllerTest {
         Long maxCotton = 90L;
         String sortBy = "color";
         Integer expectedQuantity = 100;
-        when(socksService.getSocksQuantity(color, comparison, cottonPart, minCotton, maxCotton, sortBy))
+        when(socksService.getSocks(color, comparison, cottonPart, minCotton, maxCotton, sortBy))
                 .thenReturn(expectedQuantity);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/socks")

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.artq.practice.socks.model.Socks;
 import ru.artq.practice.socks.service.SocksService;
 
 @RestController
@@ -37,9 +38,14 @@ public class SocksController {
             @RequestParam(required = false) Long minCotton,
             @RequestParam(required = false) Long maxCotton,
             @RequestParam(required = false) String sortBy) {
-        Integer result = socksService.getSocksQuantity(
+        Integer result = socksService.getSocks(
                 color, comparison, cottonPart, minCotton, maxCotton, sortBy);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("any")
+    public ResponseEntity<Socks> getAnySocks() {
+        return ResponseEntity.ok(socksService.getAnySocks());
     }
 
     @Operation(summary = "Регистрация прихода носков")

@@ -42,12 +42,12 @@ class SocksServiceImplTest {
     }
 
     @Test
-    void test1_getSocksQuantity_shouldReturnCorrectQuantity() {
+    void test1_getSocksQuantity_shouldReturnCorrect() {
         when(socksRepository.findByFilters("blue", "equal",
                 80L, null, null, "asc"))
                 .thenReturn(List.of(socks));
 
-        Integer result = socksService.getSocksQuantity("blue", "equal",
+        Integer result = socksService.getSocks("blue", "equal",
                 80L, null, null, "asc");
 
         assertEquals(10, result);
@@ -61,7 +61,7 @@ class SocksServiceImplTest {
                 .thenReturn(List.of());
 
         SocksNotFoundException exception = assertThrows(SocksNotFoundException.class, () ->
-                socksService.getSocksQuantity("blue", "=", 80L, null, null, "asc"));
+                socksService.getSocks("blue", "=", 80L, null, null, "asc"));
         assertEquals("На складе носки не найдены", exception.getMessage());
     }
 

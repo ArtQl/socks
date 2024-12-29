@@ -4,6 +4,8 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +18,8 @@ import ru.artq.practice.socks.repository.SocksRepository;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +27,11 @@ import java.util.List;
 @Slf4j
 public class SocksServiceImpl implements SocksService {
     private final SocksRepository socksRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
+    @Cacheable(value = "socks", key = "#color")
     @Override
-    public Integer getSocksQuantity(
+    public Integer getSocks(
             String color, String comparison,
             Long cottonPart, Long minCotton,
             Long maxCotton, String sortBy) {
@@ -105,6 +111,14 @@ public class SocksServiceImpl implements SocksService {
             log.error("Ошибка при обработке CSV файла", e);
             throw new CsvProcessingException("Ошибки при обработке файлов: ", e);
         }
+    }
+
+    @Override
+    public Socks getAnySocks() {
+        long count = new Random().nextLong(1, socksRepository.findCount());
+        Socks socks = socksRepository.findById(count).orElse(new Socks());
+        log.info("Запрос количества носков: найдено {}", socks);
+        return socks;
     }
 
     private Socks findByColorAndCottonPart(String color, Long cottonPart) {

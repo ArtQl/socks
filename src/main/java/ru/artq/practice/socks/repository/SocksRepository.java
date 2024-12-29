@@ -30,4 +30,7 @@ public interface SocksRepository extends JpaRepository<Socks, Long> {
     List<Socks> findByFilters(String color, String comparison, Long cottonPart, Long minCotton, Long maxCotton, String sortBy);
 
     Optional<Socks> findByColorAndCottonPart(String color, Long cottonPercentage);
+
+    @Query("select count(*) from Socks")
+    long findCount();
 }
